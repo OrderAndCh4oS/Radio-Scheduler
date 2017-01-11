@@ -1,0 +1,79 @@
+table {
+    border-collapse: collapse;
+    width: 100%;
+    position: relative;
+    top: -23px;
+}
+
+table, th, td {
+    border: 1px solid slategrey;
+}
+
+th {
+    text-align: left;
+}
+
+td {
+    height: 44px;
+}
+
+div {
+    box-sizing: border-box;
+}
+
+.grid-holder {
+    margin-top: 23px;
+    position: relative;
+    display: inline-block;
+}
+
+.grid {
+    width: 3456px;
+    height: 350px;
+}
+
+.radio-show {
+    position: absolute;
+    width: 144px;
+    height: 34px;
+    padding: 8px;
+    color: whitesmoke;
+    border: 2px solid whitesmoke;
+    z-index: 500;
+}
+
+.staging .radioShow {
+    display: inline-block;
+}
+
+.front {
+    z-index: 1000;
+}
+
+.color-one {
+    background-color: deeppink;
+}
+
+.color-two {
+    background-color: darkseagreen;
+}
+
+.color-three {
+    background-color: cornflowerblue;
+}
+
+.color-four {
+    background-color: mediumpurple;
+}
+
+.color-five {
+    background-color: yellowgreen;
+}
+
+.color-six {
+    background-color: mediumvioletred;
+}
+
+.color-seven {
+    background-color: darkorange;
+}

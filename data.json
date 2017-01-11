@@ -1,0 +1,20 @@
+{
+  "radioShows": [
+    {
+      "id": "1",
+      "name": "Show One"
+    },
+    {
+      "id": "2",
+      "name": "Show Two"
+    },
+    {
+      "id": "3",
+      "name": "Show Three"
+    },
+    {
+      "id": "4",
+      "name": "Show Four"
+    }
+  ]
+}
