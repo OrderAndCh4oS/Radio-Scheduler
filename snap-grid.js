@@ -8,7 +8,6 @@ var body = document.getElementById('body'),
     offset = gridHolder.getBoundingClientRect(),
     dx,
     dy,
-    width,
     monday = new Date(); // ToDo: set this to the last Monday.
 
 monday.setHours(0, 0, 0, 0);
