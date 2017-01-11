@@ -1,28 +1,9 @@
-table {
-    border-collapse: collapse;
-    width: 100%;
-    position: relative;
-    top: -23px;
-}
-
-table, th, td {
-    border: 1px solid slategrey;
-}
-
-th {
-    text-align: left;
-}
-
-td {
-    height: 44px;
-}
 
 div {
     box-sizing: border-box;
 }
 
 .grid-holder {
-    margin-top: 23px;
     position: relative;
     display: inline-block;
 }
@@ -30,16 +11,24 @@ div {
 .grid {
     width: 3456px;
     height: 350px;
+    border: 1px solid slategrey;
+    background: url("../images/hour.svg");
 }
 
 .radio-show {
     position: absolute;
     width: 144px;
-    height: 34px;
-    padding: 8px;
-    color: whitesmoke;
-    border: 2px solid whitesmoke;
+    height: 44px;
+    padding: 6px 8px 8px 44px;
+    color: slategrey;
     z-index: 500;
+    background: whitesmoke url("../images/grip.svg") top left no-repeat;
+}
+
+.radio-show p {
+    margin: 0;
+    padding: 0;
+    font-size: 12px;
 }
 
 .staging .radioShow {
@@ -51,29 +40,5 @@ div {
 }
 
 .color-one {
-    background-color: deeppink;
-}
-
-.color-two {
-    background-color: darkseagreen;
-}
-
-.color-three {
-    background-color: cornflowerblue;
-}
-
-.color-four {
-    background-color: mediumpurple;
-}
-
-.color-five {
-    background-color: yellowgreen;
-}
-
-.color-six {
-    background-color: mediumvioletred;
-}
-
-.color-seven {
-    background-color: darkorange;
+    border: 2px solid deeppink;
 }
