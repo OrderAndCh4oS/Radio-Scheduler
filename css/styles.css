@@ -21,7 +21,7 @@ div {
     height: 44px;
     padding: 6px 8px 8px 44px;
     color: slategrey;
-    z-index: 500;
+    z-index: 1;
     background: whitesmoke url("../images/grip.svg") top left no-repeat;
 }
 
@@ -31,14 +31,27 @@ div {
     font-size: 12px;
 }
 
+.radio-show:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: -10px;
+    display: block;
+    height: 44px;
+    width: 10px;
+    background-image: url("../images/arrow.svg");
+    z-index: 4;
+}
+
 .staging .radioShow {
     display: inline-block;
 }
 
 .front {
-    z-index: 1000;
+    z-index: 3;
 }
 
 .color-one {
     border: 2px solid deeppink;
+    border-right-width: 12px;
 }

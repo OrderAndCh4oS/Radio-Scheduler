@@ -8,7 +8,8 @@ var body = document.getElementById('body'),
     offset = gridHolder.getBoundingClientRect(),
     dx,
     dy,
-    monday = new Date();
+    width,
+    monday = new Date(); // ToDo: set this to the last Monday.
 
 monday.setHours(0, 0, 0, 0);
 
@@ -21,7 +22,6 @@ function addShow() {
     var id = "radioShow-" + showCount, showBar = document.createElement("div");
     showBar.setAttribute("id", id);
     showBar.setAttribute("class", "radio-show color-one");
-
     staging.appendChild(showBar);
 
 }
@@ -36,11 +36,43 @@ function selectBlock(event) {
     currentTargetRect = currentTarget.getBoundingClientRect();
     dx = x - currentTargetRect.left + offset.left;
     dy = y - currentTargetRect.top + offset.top;
-    body.addEventListener('mousemove', moveBlock);
-    body.addEventListener('mouseup', dropBlock);
+    if (!inResizeArea(currentTargetRect.width, event.offsetX)) {
+        body.addEventListener('mousemove', moveBlock);
+        body.addEventListener('mouseup', dropBlock);
+    } else {
+        body.addEventListener('mousemove', resizeBlock);
+        body.addEventListener('mouseup', setBlockSize);
+    }
 }
 
-function moveBlock() {
+function inResizeArea(blockWidth, offsetX) {
+    return blockWidth - offsetX < 12;
+}
+
+function resizeBlock(event) {
+    var x = event.pageX;
+    currentTarget.style.width = (x - currentTargetRect.left) + "px";
+}
+
+function setBlockDateTime() {
+    var blockBounds;
+    blockBounds = currentTarget.getBoundingClientRect();
+    leftDateTime = pixelsToTime(blockBounds.left);
+    rightDateTime = pixelsToTime(blockBounds.right);
+    date = pixelsToDate(blockBounds.top);
+
+    currentTarget.innerHTML = "<p>" + date + "<p>" + leftDateTime + '–' + rightDateTime;
+}
+
+function setBlockSize() {
+    snapWidth(currentTarget);
+    setBlockDateTime();
+
+    body.removeEventListener('mousemove', resizeBlock);
+    body.removeEventListener('mouseup', setBlockSize);
+}
+
+function moveBlock(event) {
     var x = event.pageX,
         y = event.pageY;
     currentTarget.style.left = (x - dx) + "px";
@@ -48,15 +80,11 @@ function moveBlock() {
 }
 
 function dropBlock() {
-    var blockBounds;
     if (isInGridBounds(currentTarget)) {
         grid.appendChild(currentTarget);
         snapBlock(currentTarget);
         blockBounds = currentTarget.getBoundingClientRect();
-        leftDateTime = pixelsToTime(blockBounds.left);
-        rightDateTime = pixelsToTime(blockBounds.right);
-        date = pixelsToDate(blockBounds.top);
-        currentTarget.innerHTML = "<p>" + date +"<p>" + leftDateTime + '–' + rightDateTime;
+        setBlockDateTime()
     } else {
         currentTarget.remove();
     }
@@ -72,6 +100,18 @@ function isInGridBounds(element) {
     var bounds = grid.getBoundingClientRect();
     currentTargetBounds = element.getBoundingClientRect();
     return !(currentTargetBounds.left < bounds.left || currentTargetBounds.top < bounds.top);
+}
+
+function snapWidth(element) {
+    var left, right,
+        snapTo = 12,
+    currentTargetBounds = element.getBoundingClientRect();
+    right = currentTargetBounds.right - offset.left;
+    left = currentTargetBounds.left - offset.left;
+    if ((right - left) % snapTo != 0) {
+        var snapPoint = right - left + (snapTo - Math.ceil((right - left) % snapTo));
+        element.style.width = snapPoint + "px";
+    }
 }
 
 function snapBlock(element) {
@@ -107,11 +147,10 @@ function pixelsToDate(top) {
     var day = 44,
         dateTime = new Date(monday),
         formattedDate; // pixel width of five min interval
-    day = Math.round((top - offset.top)/day);
-    console.log("day", day);
-    dateTime.setHours(day*24);
+    day = Math.round((top - offset.top) / day);
+    dateTime.setHours(day * 24);
 
-    formattedDate = dateTime.getFullYear() + "-" + padZeroes(dateTime.getMonth()+1) + "-" + padZeroes(dateTime.getDate());
+    formattedDate = dateTime.getFullYear() + "-" + padZeroes(dateTime.getMonth() + 1) + "-" + padZeroes(dateTime.getDate());
     return formattedDate;
 }
 
