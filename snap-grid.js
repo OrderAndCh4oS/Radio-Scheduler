@@ -1,4 +1,3 @@
-
 var gridHolder = document.getElementById("gridHolder"),
     grid = document.getElementById('grid'),
     staging = document.getElementById("staging"),
@@ -21,6 +20,8 @@ var gridHolder = document.getElementById("gridHolder"),
 
 gridHolder.addEventListener("mousedown", selectBlock);
 document.getElementById("addShow").addEventListener("click", addShow);
+
+console.log("offset", offset.left, offset.top);
 
 monday.setHours(-((monday.getDay() - 1) * 24), 0, 0, 0);
 
@@ -57,28 +58,36 @@ gridHolder.insertBefore(gridTimes, grid);
 gridHolder.insertBefore(gridDays, grid);
 
 function addShow() {
+    var select = document.getElementById("radioShows"),
+        option = select.options[select.selectedIndex];
+    if (option.text == "Select Show") {
+        return;
+    }
+    showBar = createBlock(option.text, option.value);
+    staging.appendChild(showBar);
+}
+
+function createBlock(showTitle, showID) {
     showCount++;
 
     var id = "radioShow-" + showCount,
         showBar = document.createElement("div"),
-        select = document.getElementById("radioShows"),
-        option = select.options[select.selectedIndex],
-        title = document.createElement('p');
-
-    if(option.text == "Select Show") {
-        return;
-    }
+        title = document.createElement('p'),
+        date = document.createElement('p');
 
     showBar.setAttribute("id", id);
     showBar.setAttribute("class", "radio-show color-one");
 
-    showBar.dataset.title = option.text;
-    showBar.dataset.id = option.value;
+    showBar.dataset.title = showTitle;
+    showBar.dataset.id = showID;
 
-    title.innerHTML = option.text;
+    title.innerHTML = showTitle;
+    date.setAttribute('class', 'date meta');
 
     showBar.appendChild(title);
-    staging.appendChild(showBar);
+    showBar.appendChild(date);
+
+    return showBar;
 }
 
 function selectBlock(ev) {
@@ -125,12 +134,12 @@ function moveBlock(ev) {
     currentTarget.style.left = (x - dx) + window.scrollX + "px";
     currentTarget.style.top = (y - dy) + "px";
 
+    // console.log("Move", (x - dx) + window.scrollX + "px", (y - dy) + "px");
 }
 
 function dropBlock(ev) {
     var x = ev.clientX;
     if (isInGridBounds(currentTarget)) {
-        currentTarget.style.left = (x - dx) + window.scrollX + "px";
         grid.appendChild(currentTarget);
         snapBlock(currentTarget);
         blockBounds = currentTarget.getBoundingClientRect();
@@ -187,17 +196,19 @@ function snapBlock(element) {
 }
 
 function setBlockDateTime() {
-    var blockBounds,
-        timeText = document.createElement('p');
+    var blockBounds;
+
     blockBounds = currentTarget.getBoundingClientRect();
-    leftDateTime = pixelsToTime(blockBounds.left);
-    rightDateTime = pixelsToTime(blockBounds.right);
+    startTime = pixelsToTime(blockBounds.left);
+    endTime = pixelsToTime(blockBounds.right);
     date = pixelsToDate(blockBounds.top);
 
-    timeText.innerHTML = leftDateTime + '–' + rightDateTime;
+    setTimeAndDateOnBlock(currentTarget, startTime, endTime, date)
+}
 
-    currentTarget.dataset.date = date;
-    currentTarget.appendChild(timeText);
+function setTimeAndDateOnBlock(element, startTime, endTime, date) {
+    element.lastChild.innerHTML = startTime + '–' + endTime;
+    element.dataset.date = date;
 }
 
 function pixelsToTime(sidePosition) {
@@ -212,14 +223,16 @@ function pixelsToTime(sidePosition) {
 
 function pixelsToDate(top) {
     var day = blockHeight,
-        dateTime = new Date(monday),
-        formattedDate;
+        dateTime = new Date(monday);
     day = Math.round((top - offset.top) / day);
     hoursInDay = 24;
     dateTime.setHours((day - 1) * hoursInDay);
 
-    formattedDate = dateTime.getFullYear() + "-" + padZeroes(dateTime.getMonth() + 1) + "-" + padZeroes(dateTime.getDate());
-    return formattedDate;
+    return formattedDate(dateTime);
+}
+
+function formattedDate(date) {
+    return date.getFullYear() + "-" + padZeroes(date.getMonth() + 1) + "-" + padZeroes(date.getDate());
 }
 
 function formattedTime(date) {
