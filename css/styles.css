@@ -63,7 +63,7 @@ div {
     display: block;
     height: 44px;
     width: 10px;
-    background-image: url("../images/arrow.svg");
+    background: url("../images/arrow.svg") center right no-repeat;
     cursor: col-resize;
     z-index: 4;
 }

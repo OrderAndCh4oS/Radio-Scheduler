@@ -1,3 +1,4 @@
+
 var gridHolder = document.getElementById("gridHolder"),
     grid = document.getElementById('grid'),
     staging = document.getElementById("staging"),
@@ -11,7 +12,7 @@ var gridHolder = document.getElementById("gridHolder"),
     blockWidth = 144,
     blockIntervalWidth = blockWidth / intervals,
     intervalValue = 60 / intervals,
-    monday = new Date(),  // ToDo: set this to the last Monday.
+    monday = new Date(),
     gridDays = document.createElement('div'),
     gridDaysWidth = 100,
     gridTimes = document.createElement('div'),
@@ -58,9 +59,25 @@ gridHolder.insertBefore(gridDays, grid);
 function addShow() {
     showCount++;
 
-    var id = "radioShow-" + showCount, showBar = document.createElement("div");
+    var id = "radioShow-" + showCount,
+        showBar = document.createElement("div"),
+        select = document.getElementById("radioShows"),
+        option = select.options[select.selectedIndex],
+        title = document.createElement('p');
+
+    if(option.text == "Select Show") {
+        return;
+    }
+
     showBar.setAttribute("id", id);
     showBar.setAttribute("class", "radio-show color-one");
+
+    showBar.dataset.title = option.text;
+    showBar.dataset.id = option.value;
+
+    title.innerHTML = option.text;
+
+    showBar.appendChild(title);
     staging.appendChild(showBar);
 }
 
@@ -170,13 +187,17 @@ function snapBlock(element) {
 }
 
 function setBlockDateTime() {
-    var blockBounds;
+    var blockBounds,
+        timeText = document.createElement('p');
     blockBounds = currentTarget.getBoundingClientRect();
     leftDateTime = pixelsToTime(blockBounds.left);
     rightDateTime = pixelsToTime(blockBounds.right);
     date = pixelsToDate(blockBounds.top);
 
-    currentTarget.innerHTML = "<p>" + date + "<p>" + leftDateTime + '–' + rightDateTime;
+    timeText.innerHTML = leftDateTime + '–' + rightDateTime;
+
+    currentTarget.dataset.date = date;
+    currentTarget.appendChild(timeText);
 }
 
 function pixelsToTime(sidePosition) {
