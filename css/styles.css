@@ -8,9 +8,32 @@ div {
     display: inline-block;
 }
 
+.grid-times {
+    margin-left: 100px;
+    height: 24px;
+}
+
+.grid-days {
+    padding-top: 8px;
+    padding-right: 8px;
+    width: 100px;
+    float: left;
+    text-align: right;
+}
+
+.grid-days p, .grid-times p {
+    margin: 0;
+    padding: 0;
+}
+
+.grid-time {
+    display: inline-block;
+}
+
 .grid {
     width: 3456px;
-    height: 350px;
+    height: 308px;
+    margin-left: 100px;
     border: 1px solid slategrey;
     background: url("../images/hour.svg");
 }
@@ -23,6 +46,7 @@ div {
     color: slategrey;
     z-index: 1;
     background: whitesmoke url("../images/grip.svg") top left no-repeat;
+    cursor: pointer;
 }
 
 .radio-show p {
@@ -40,7 +64,12 @@ div {
     height: 44px;
     width: 10px;
     background-image: url("../images/arrow.svg");
+    cursor: col-resize;
     z-index: 4;
+}
+
+.staging {
+    margin-left: 100px;
 }
 
 .staging .radioShow {
