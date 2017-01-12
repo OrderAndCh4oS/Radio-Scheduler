@@ -18,10 +18,10 @@ var gridHolder = document.getElementById("gridHolder"),
     gridTimesHeight = 24,
     days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-monday.setHours(0, 0, 0, 0);
-
 gridHolder.addEventListener("mousedown", selectBlock);
 document.getElementById("addShow").addEventListener("click", addShow);
+
+monday.setHours(-((monday.getDay() - 1) * 24), 0, 0, 0);
 
 gridDays.className = "grid-days";
 gridDays.style.width = gridDaysWidth;
@@ -72,7 +72,7 @@ function selectBlock(ev) {
         y = ev.clientY;
     currentTarget = ev.target;
     currentTargetRect = currentTarget.getBoundingClientRect();
-    console.log(currentTargetRect.left);
+
     dx = x - currentTargetRect.left + offset.left - gridDaysWidth;
     dy = y - currentTargetRect.top + offset.top;
     if (!inResizeArea(currentTargetRect.width, ev.offsetX)) {
@@ -107,13 +107,12 @@ function moveBlock(ev) {
         y = ev.clientY;
     currentTarget.style.left = (x - dx) + window.scrollX + "px";
     currentTarget.style.top = (y - dy) + "px";
-    console.log("move", window.scrollX);
+
 }
 
 function dropBlock(ev) {
     var x = ev.clientX;
     if (isInGridBounds(currentTarget)) {
-        console.log("drop", window.scrollX);
         currentTarget.style.left = (x - dx) + window.scrollX + "px";
         grid.appendChild(currentTarget);
         snapBlock(currentTarget);
@@ -158,7 +157,7 @@ function snapBlock(element) {
         snapToLeft = blockIntervalWidth,
         snapToTop = blockHeight;
     currentTargetBounds = element.getBoundingClientRect();
-    console.log("bounds", currentTargetBounds);
+
 
     left = currentTargetBounds.left - offset.left + window.scrollX;
     top = currentTargetBounds.top - offset.top;
@@ -196,7 +195,7 @@ function pixelsToDate(top) {
         formattedDate;
     day = Math.round((top - offset.top) / day);
     hoursInDay = 24;
-    dateTime.setHours(day * hoursInDay);
+    dateTime.setHours((day - 1) * hoursInDay);
 
     formattedDate = dateTime.getFullYear() + "-" + padZeroes(dateTime.getMonth() + 1) + "-" + padZeroes(dateTime.getDate());
     return formattedDate;
