@@ -21,8 +21,6 @@ var gridHolder = document.getElementById("gridHolder"),
 gridHolder.addEventListener("mousedown", selectBlock);
 document.getElementById("addShow").addEventListener("click", addShow);
 
-console.log("offset", offset.left, offset.top);
-
 monday.setHours(-((monday.getDay() - 1) * 24), 0, 0, 0);
 
 gridDays.className = "grid-days";
@@ -134,11 +132,10 @@ function moveBlock(ev) {
     currentTarget.style.left = (x - dx) + window.scrollX + "px";
     currentTarget.style.top = (y - dy) + "px";
 
-    // console.log("Move", (x - dx) + window.scrollX + "px", (y - dy) + "px");
+    //
 }
 
 function dropBlock(ev) {
-    var x = ev.clientX;
     if (isInGridBounds(currentTarget)) {
         grid.appendChild(currentTarget);
         snapBlock(currentTarget);

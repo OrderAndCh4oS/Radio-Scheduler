@@ -8,7 +8,7 @@ var radioShowData = jsonRequest("http://localhost:63342/snap-grid/data/radio-sho
 
 function setRadioShowData() {
     var data = JSON.parse(radioShowData.response);
-    console.log(data);
+
     for (var i = 0; i < data.radio_shows.length; i++) {
         var radioShow = data.radio_shows[i],
             startTime = convertedDate(radioShow.start_time),
