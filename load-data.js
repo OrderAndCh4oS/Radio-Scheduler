@@ -22,7 +22,7 @@ function setRadioShowData() {
         showBar = createBlock(radioShow.name, radioShow.id);
         setTimeAndDateOnBlock(showBar, formattedTime(startTime), formattedTime(endTime), formattedDate(startTime));
         showBar.style.left = startTimePosition + gridDaysWidth + "px";
-        showBar.style.top = top - offset.top + gridTimesHeight - 7 + "px";
+        showBar.style.top = top - offset.top + gridTimesHeight - 8 + "px";
         showBar.style.width = endTimePosition - startTimePosition + "px";
         grid.appendChild(showBar);
     }
