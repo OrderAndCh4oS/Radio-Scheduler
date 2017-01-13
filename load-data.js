@@ -17,12 +17,12 @@ function setRadioShowData() {
             endTimeMinutes = endTime.getHours() * 60 + endTime.getMinutes(),
             startTimePosition = (startTimeMinutes/5) * intervals,
             endTimePosition = (endTimeMinutes/5) * intervals,
-            top = startTime.getDay() * blockHeight;
+            top = (startTime.getDay() - 1) * blockHeight;
 
         showBar = createBlock(radioShow.name, radioShow.id);
         setTimeAndDateOnBlock(showBar, formattedTime(startTime), formattedTime(endTime), formattedDate(startTime));
-        showBar.style.left = startTimePosition + gridDaysWidth + "px";
-        showBar.style.top = top - offset.top + gridTimesHeight - 8 + "px";
+        showBar.style.left = startTimePosition + "px";
+        showBar.style.top = top + "px";
         showBar.style.width = endTimePosition - startTimePosition + "px";
         grid.appendChild(showBar);
     }

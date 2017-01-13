@@ -1,10 +1,11 @@
 var gridHolder = document.getElementById("gridHolder"),
+    gridAnchor = document.getElementById("gridAnchor"),
     grid = document.getElementById('grid'),
     staging = document.getElementById("staging"),
     showCount = 0,
     currentTarget,
     currentTargetRect,
-    offset = grid.getBoundingClientRect(),
+    origin = gridAnchor.getBoundingClientRect(),
     dx, dy,
     intervals = 12,
     blockHeight = 44,
@@ -17,6 +18,8 @@ var gridHolder = document.getElementById("gridHolder"),
     gridTimes = document.createElement('div'),
     gridTimesHeight = 24,
     days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+console.log("Origin", origin);
 
 gridHolder.addEventListener("mousedown", selectBlock);
 document.getElementById("addShow").addEventListener("click", addShow);
@@ -52,8 +55,8 @@ for (var i = 0; i < 24; i++) {
     gridTimes.appendChild(timeDiv);
 }
 
-gridHolder.insertBefore(gridTimes, grid);
-gridHolder.insertBefore(gridDays, grid);
+gridHolder.insertBefore(gridTimes, gridAnchor);
+gridHolder.insertBefore(gridDays, gridAnchor);
 
 function addShow() {
     var select = document.getElementById("radioShows"),
@@ -92,13 +95,13 @@ function selectBlock(ev) {
     if (!hasClass(ev.target, 'radio-show')) {
         return;
     }
-    var x = ev.clientX,
-        y = ev.clientY;
+    var x = ev.pageX,
+        y = ev.pageY;
     currentTarget = ev.target;
     currentTargetRect = currentTarget.getBoundingClientRect();
 
-    dx = x - currentTargetRect.left + offset.left - gridDaysWidth;
-    dy = y - currentTargetRect.top + offset.top;
+    dx = ev.offsetX + origin.left;
+    dy = ev.offsetY + origin.top;
     if (!inResizeArea(currentTargetRect.width, ev.offsetX)) {
         document.addEventListener('onscroll', moveBlock);
         document.addEventListener('mousemove', moveBlock);
@@ -114,8 +117,8 @@ function inResizeArea(blockWidth, offsetX) {
 }
 
 function resizeBlock(ev) {
-    var x = ev.clientX;
-    currentTarget.style.width = (x - currentTargetRect.left) + "px";
+    var x = ev.pageX;
+    currentTarget.style.width = (x - currentTargetRect.left - window.scrollX) + "px";
 }
 
 function setBlockSize() {
@@ -127,15 +130,15 @@ function setBlockSize() {
 }
 
 function moveBlock(ev) {
-    var x = ev.clientX,
-        y = ev.clientY;
-    currentTarget.style.left = (x - dx) + window.scrollX + "px";
-    currentTarget.style.top = (y - dy) + "px";
-
-    //
+    var x = ev.pageX,
+        y = ev.pageY;
+    currentTarget.style.left = (x - dx) - gridDaysWidth + "px";
+    currentTarget.style.top = (y - dy) - gridTimesHeight + "px";
 }
 
 function dropBlock(ev) {
+    var x = ev.pageX,
+        y = ev.pageY;
     if (isInGridBounds(currentTarget)) {
         grid.appendChild(currentTarget);
         snapBlock(currentTarget);
@@ -167,8 +170,8 @@ function snapWidth(element) {
     var left, right,
         snapTo = blockIntervalWidth,
         currentTargetBounds = element.getBoundingClientRect();
-    right = currentTargetBounds.right - offset.left;
-    left = currentTargetBounds.left - offset.left;
+    right = currentTargetBounds.right;
+    left = currentTargetBounds.left;
     if ((right - left) % snapTo != 0) {
         var snapPoint = right - left + (snapTo - Math.ceil((right - left) % snapTo));
         element.style.width = snapPoint + "px";
@@ -179,26 +182,29 @@ function snapBlock(element) {
     var left, top,
         snapToLeft = blockIntervalWidth,
         snapToTop = blockHeight;
-    currentTargetBounds = element.getBoundingClientRect();
+    currentTargetBounds = element.style.left;
 
+    left = parseInt(element.offsetLeft);
+    top = parseInt(element.offsetTop);
 
-    left = currentTargetBounds.left - offset.left + window.scrollX;
-    top = currentTargetBounds.top - offset.top;
     if (left % snapToLeft != 0) {
-        element.style.left = Math.floor(left - (left % snapToLeft)) + gridDaysWidth + "px";
+        element.style.left = Math.floor(left - (left % snapToLeft)) + "px";
     }
     if (top % snapToTop != 0) {
-        element.style.top = Math.floor(top - (top % snapToTop)) + gridTimesHeight + "px";
+        element.style.top = Math.floor(top - (top % snapToTop)) + "px";
     }
 }
 
 function setBlockDateTime() {
-    var blockBounds;
+    var left = parseInt(currentTarget.offsetLeft),
+        right = currentTarget.getBoundingClientRect().width + left,
+        top = parseInt(currentTarget.offsetTop);
 
-    blockBounds = currentTarget.getBoundingClientRect();
-    startTime = pixelsToTime(blockBounds.left);
-    endTime = pixelsToTime(blockBounds.right);
-    date = pixelsToDate(blockBounds.top);
+    console.log(right);
+    console.log(currentTarget.width);
+    startTime = pixelsToTime(left);
+    endTime = pixelsToTime(right);
+    date = pixelsToDate(top);
 
     setTimeAndDateOnBlock(currentTarget, startTime, endTime, date)
 }
@@ -212,7 +218,7 @@ function pixelsToTime(sidePosition) {
     var minutes,
         dateTime = new Date(monday);
 
-    minutes = Math.round((sidePosition - offset.left + window.scrollX) / blockIntervalWidth) * intervalValue;
+    minutes = Math.round(sidePosition / blockIntervalWidth) * intervalValue;
     dateTime.setMinutes(minutes);
 
     return formattedTime(dateTime);
@@ -221,7 +227,7 @@ function pixelsToTime(sidePosition) {
 function pixelsToDate(top) {
     var day = blockHeight,
         dateTime = new Date(monday);
-    day = Math.round((top - offset.top) / day);
+    day = Math.round(top / day);
     hoursInDay = 24;
     dateTime.setHours((day - 1) * hoursInDay);
 

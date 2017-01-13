@@ -4,8 +4,13 @@ div {
 }
 
 .grid-holder {
-    position: relative;
     display: inline-block;
+    width: 4000px;
+}
+
+.grid-anchor {
+    position: relative;
+    float: left;
 }
 
 .grid-times {
@@ -33,7 +38,6 @@ div {
 .grid {
     width: 3456px;
     height: 308px;
-    margin-left: 100px;
     border: 1px solid slategrey;
     background: url("../images/hour.svg");
 }
@@ -69,7 +73,6 @@ div {
 }
 
 .staging {
-    margin-left: 100px;
 }
 
 .staging .radioShow {
