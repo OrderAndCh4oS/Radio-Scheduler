@@ -124,7 +124,7 @@ function moveBlock(ev) {
     currentTarget.style.top = (y - dy) - gridTimesHeight + "px";
 }
 
-function dropBlock(ev) {
+function dropBlock() {
     if (isInGridBounds(currentTarget)) {
         grid.appendChild(currentTarget);
         snapBlock(currentTarget);
