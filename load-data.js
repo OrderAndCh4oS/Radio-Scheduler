@@ -1,7 +1,3 @@
-/**
- * Created by sarcoma on 12/01/17.
- */
-
 
 var selectData = jsonRequest("http://localhost:63342/snap-grid/data/select-data.json", "GET", setSelectData);
 var radioShowData = jsonRequest("http://localhost:63342/snap-grid/data/radio-show-data.json", "GET", setRadioShowData);
@@ -28,9 +24,6 @@ function setRadioShowData() {
     }
 }
 
-/**
- * Set up Radio Show select Data
- */
 function setSelectData() {
     var data = JSON.parse(selectData.response),
         select = document.getElementById("radioShows");

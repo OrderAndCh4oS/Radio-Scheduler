@@ -19,8 +19,6 @@ var gridHolder = document.getElementById("gridHolder"),
     gridTimesHeight = 24,
     days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-console.log("Origin", origin);
-
 gridHolder.addEventListener("mousedown", selectBlock);
 document.getElementById("addShow").addEventListener("click", addShow);
 
@@ -95,8 +93,6 @@ function selectBlock(ev) {
     if (!hasClass(ev.target, 'radio-show')) {
         return;
     }
-    var x = ev.pageX,
-        y = ev.pageY;
     currentTarget = ev.target;
     currentTargetRect = currentTarget.getBoundingClientRect();
 
@@ -112,21 +108,13 @@ function selectBlock(ev) {
     }
 }
 
+function hasClass(element, className) {
+    return element.className.indexOf(className) != -1;
+}
+
+
 function inResizeArea(blockWidth, offsetX) {
     return blockWidth - offsetX < blockIntervalWidth;
-}
-
-function resizeBlock(ev) {
-    var x = ev.pageX;
-    currentTarget.style.width = (x - currentTargetRect.left) + "px";
-}
-
-function setBlockSize() {
-    snapWidth(currentTarget);
-    setBlockDateTime();
-
-    document.removeEventListener('mousemove', resizeBlock);
-    document.removeEventListener('mouseup', setBlockSize);
 }
 
 function moveBlock(ev) {
@@ -137,8 +125,6 @@ function moveBlock(ev) {
 }
 
 function dropBlock(ev) {
-    var x = ev.pageX,
-        y = ev.pageY;
     if (isInGridBounds(currentTarget)) {
         grid.appendChild(currentTarget);
         snapBlock(currentTarget);
@@ -152,8 +138,16 @@ function dropBlock(ev) {
     document.removeEventListener('mouseup', dropBlock);
 }
 
-function hasClass(element, className) {
-    return element.className.indexOf(className) != -1;
+function resizeBlock(ev) {
+    var x = ev.pageX;
+    currentTarget.style.width = (x - currentTargetRect.left - window.scrollX) + "px";
+}
+
+function setBlockSize() {
+    snapWidth(currentTarget);
+    setBlockDateTime();
+    document.removeEventListener('mousemove', resizeBlock);
+    document.removeEventListener('mouseup', setBlockSize);
 }
 
 function isInGridBounds(element) {
@@ -200,8 +194,6 @@ function setBlockDateTime() {
         right = currentTarget.getBoundingClientRect().width + left,
         top = parseInt(currentTarget.offsetTop);
 
-    console.log(right);
-    console.log(currentTarget.width);
     startTime = pixelsToTime(left);
     endTime = pixelsToTime(right);
     date = pixelsToDate(top);
@@ -227,6 +219,7 @@ function pixelsToTime(sidePosition) {
 function pixelsToDate(top) {
     var day = blockHeight,
         dateTime = new Date(monday);
+
     day = Math.round(top / day);
     hoursInDay = 24;
     dateTime.setHours((day - 1) * hoursInDay);

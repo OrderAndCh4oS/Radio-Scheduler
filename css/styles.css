@@ -3,6 +3,10 @@ div {
     box-sizing: border-box;
 }
 
+.wrapper {
+    padding: 100px;
+}
+
 .grid-holder {
     display: inline-block;
     width: 4000px;
