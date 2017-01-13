@@ -118,7 +118,7 @@ function inResizeArea(blockWidth, offsetX) {
 
 function resizeBlock(ev) {
     var x = ev.pageX;
-    currentTarget.style.width = (x - currentTargetRect.left - window.scrollX) + "px";
+    currentTarget.style.width = (x - currentTargetRect.left) + "px";
 }
 
 function setBlockSize() {
