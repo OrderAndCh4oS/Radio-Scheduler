@@ -1,4 +1,8 @@
 
+body {
+    background-color: gold;
+}
+
 div {
     box-sizing: border-box;
 }
@@ -51,10 +55,12 @@ div {
     width: 144px;
     height: 44px;
     padding: 6px 8px 8px 44px;
-    color: slategrey;
+    color: black;
+    font-weight: 700;
     z-index: 1;
-    background: whitesmoke url("../images/grip.svg") top left no-repeat;
+    background: white url("../images/grip.svg") top left no-repeat;
     cursor: pointer;
+    user-select: none;
 }
 
 .radio-show p {
@@ -88,6 +94,6 @@ div {
 }
 
 .color-one {
-    border: 2px solid deeppink;
+    border: 2px solid black;
     border-right-width: 12px;
 }

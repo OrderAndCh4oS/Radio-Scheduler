@@ -1,6 +1,7 @@
-
-var selectData = jsonRequest("http://localhost:63342/snap-grid/data/select-data.json", "GET", setSelectData);
-var radioShowData = jsonRequest("http://localhost:63342/snap-grid/data/radio-show-data.json", "GET", setRadioShowData);
+var selectData = jsonRequest(baseUrl + '/data/select-data.json', 'GET',
+  setSelectData)
+var radioShowData = jsonRequest(baseUrl + '/data/radio-show-data.json', 'GET',
+  setRadioShowData)
 
 function setRadioShowData() {
     var data = JSON.parse(radioShowData.response);
