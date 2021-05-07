@@ -4,4 +4,4 @@
 
 Drag and drop scheduler prototype for a radio station 
 
-https://sarcoma.github.io/Radio-Scheduler/
+https://orderandch4os.github.io/Radio-Scheduler/
