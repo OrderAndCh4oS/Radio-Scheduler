@@ -1,1 +1,1 @@
-var baseUrl = "https://sarcoma.github.io/Radio-Scheduler";
+var baseUrl = "https://orderandch4os.github.io/Radio-Scheduler";
